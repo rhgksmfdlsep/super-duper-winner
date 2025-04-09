@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>타자 연습</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #f0f0f0;
+        }
+        input {
+            font-size: 20px;
+            padding: 10px;
+            width: 80%;
+            margin-top: 20px;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 22px;
+            color: green;
+        }
+        .message {
+            font-size: 22px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>타자 연습</h1>
+    <p>주어진 문장을 정확히 타이핑하세요!</p>
+    <p id="sentence">타이핑을 시작하려면 "게임 시작" 버튼을 눌러주세요.</p>
+    <input type="text" id="inputText" oninput="checkTyping()" placeholder="여기에 타이핑하세요">
+    <button onclick="startGame()">게임 시작</button>
+    <p class="result" id="result"></p>
+    <p class="message" id="message"></p>
+
+    <script>
+        const sentences = [
+            "타자 속도를 테스트 해보세요!",
+            "타자 연습은 꾸준히 할수록 좋아요.",
+            "타자 연습은 손목 건강에도 좋아요.",
+            "타자를 빨리 치려면 연습이 중요해요!"
+        ];
+
+        let currentSentence;
+        let startTime;
+        let isTyping = false;
+
+        function startGame() {
+            const randomIndex = Math.floor(Math.random() * sentences.length);
+            currentSentence = sentences[randomIndex];
+            document.getElementById("sentence").innerText = currentSentence;
+            document.getElementById("inputText").value = "";
+            document.getElementById("result").innerText = "";
+            document.getElementById("message").innerText = "";
+            startTime = new Date();
+            isTyping = true;
+        }
+
+        function checkTyping() {
+            if (!isTyping) return;
+
+            const typedText = document.getElementById("inputText").value;
+            const totalLength = currentSentence.length;
+            const typedLength = typedText.length;
+
+            // 정확도 계산
+            let correctCount = 0;
+            for (let i = 0; i < typedLength; i++) {
+                if (typedText[i] === currentSentence[i]) {
+                    correctCount++;
+                }
+            }
+
+            const accuracy = (correctCount / totalLength) * 100;
+            const typedWords = typedText.split(" ").length;
+
+            if (typedText === currentSentence) {
+                isTyping = false;
+                const endTime = new Date();
+                const timeTaken = (endTime - startTime) / 1000;
+                document.getElementById("result").innerText = `타자 속도: ${typedWords}단어, 정확도: ${accuracy.toFixed(2)}%`;
+                document.getElementById("message").innerText = `완료! 소요 시간: ${timeTaken.toFixed(2)}초`;
+            } else {
+                document.getElementById("result").innerText = `타자 속도: ${typedWords}단어, 정확도: ${accuracy.toFixed(2)}%`;
+            }
+        }
+    </script>
+</body>
+</html>
