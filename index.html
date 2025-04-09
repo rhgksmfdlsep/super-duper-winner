@@ -15,12 +15,12 @@
             overflow: hidden;
         }
 
-        /* 귀여운 배경 그림, 이미지 URL 수정 */
+        /* 배경 이미지 적용 (로컬 이미지 경로) */
         .floating-image {
             position: absolute;
-            width: 100px;
-            height: 100px;
-            background-image: url('https://your-image-url.com/cute-image.png'); /* 여기에 실제 이미지 URL 넣기 */
+            width: 100px;  /* 적당한 크기 */
+            height: 100px;  /* 적당한 크기 */
+            background-image: url('images/sky_cloud_background.png'); /* 로컬 파일 경로 */
             background-size: cover;
             animation: moveBackground 5s infinite linear;
         }
@@ -170,10 +170,10 @@
                 document.getElementById("message").innerText = `정확도: ${accuracy}%`;
             }
 
-            // 타자 속도 표시 (타자 속도: 타/분)
+            // 타자 속도 표시 (타자 속도: 타/30초)
             typingDuration = (new Date() - typingStartTime) / 1000; // 타이핑 시작 후 경과 시간 (초)
-            const typingSpeed = Math.round(typedWords * (60 / typingDuration)); // 1분당 타자 속도
-            document.getElementById("result").innerText = `타자 속도: ${typingSpeed}타/분`;
+            const typingSpeed = Math.round(typedWords * (2 / typingDuration)); // 30초당 타자 속도
+            document.getElementById("result").innerText = `타자 속도: ${typingSpeed}타/30초`;
 
             // 문장이 완성되었을 때
             if (typedText === currentSentence) {
