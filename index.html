@@ -6,16 +6,41 @@
     <title>타자 연습</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            background-color: #d0e4fa;
+            color: #595959;
             text-align: center;
             padding: 50px;
-            background-color: #f0f0f0;
+        }
+        h1 {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        .game-container {
+            font-size: 20px;
+            margin: 20px;
+        }
+        .sentence {
+            font-size: 24px;
+            margin: 20px 0;
+            font-weight: bold;
         }
         input {
+            font-family: 'Gothic', sans-serif;
             font-size: 20px;
             padding: 10px;
             width: 80%;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+        }
+        button {
+            font-size: 20px;
+            padding: 10px 20px;
             margin-top: 20px;
+            cursor: pointer;
+            background-color: #ffffff;
+            border: 1px solid #595959;
         }
         .result {
             margin-top: 20px;
@@ -26,35 +51,41 @@
             font-size: 22px;
             color: red;
         }
-        button {
-            font-size: 20px;
-            padding: 10px 20px;
-            margin-top: 20px;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
     <h1>타자 연습</h1>
-    <p>주어진 문장을 정확히 타이핑하세요!</p>
-    <p id="sentence">타이핑을 시작하려면 "게임 시작" 버튼을 눌러주세요.</p>
-    <input type="text" id="inputText" oninput="checkTyping()" placeholder="여기에 타이핑하세요">
-    <button onclick="startGame()">게임 시작</button>
-    <p class="result" id="result"></p>
-    <p class="message" id="message"></p>
+    <div class="game-container">
+        <p>주어진 문장을 정확히 타이핑하세요!</p>
+        <button onclick="startGame()">게임 시작</button>
+        <div id="typingArea" style="display:none;">
+            <p id="sentence" class="sentence"></p>
+            <input type="text" id="inputText" oninput="checkTyping()" placeholder="타이핑하세요">
+            <p class="result" id="result"></p>
+            <p class="message" id="message"></p>
+        </div>
+    </div>
 
     <script>
         const sentences = [
-            "타자 속도를 테스트 해보세요!",
-            "오늘 나는 내 이상형을 만났다.",
-            "길 가다가 책을 떨궜다.",
-            "아름이는 왜 저렇게 생겼을까"
-            "고아름은 고하늘의 언니지만 하는 짓은 동생이다."
+            "아름이는 하늘이보다 정신연령이 낮다.",
+            "하늘이는 매우 똑똑하다.",
+            "하늘이는 오늘도 다이어트를 한다.",
+            "고아름은 오스트랄로피테쿠스 닮았다.",
+            "세계에서 인성이 젤 나쁜 건 고아름이다.",
+            "침팬지 인간화 현실판은 아름이다.",
+            "고다운이란 남동생도 있는데 못생겼다.",
+            "아름이랑 다운이는 닮았다.",
+            "둘의 얼굴을 보면 웃음이 나온다. 웃기게 생겨서."
         ];
 
         let currentSentence;
         let startTime;
         let isTyping = false;
+        let typedChars = 0;
+        let totalChars = 0;
+        let correctCount = 0;
+        let accuracy = 100;
 
         function startGame() {
             const randomIndex = Math.floor(Math.random() * sentences.length);
@@ -63,37 +94,48 @@
             document.getElementById("inputText").value = "";
             document.getElementById("result").innerText = "";
             document.getElementById("message").innerText = "";
-            document.getElementById("message").innerText = "";
+            document.getElementById("typingArea").style.display = "block";
             startTime = new Date();
             isTyping = true;
+            typedChars = 0;
+            totalChars = currentSentence.length;
+            correctCount = 0;
+            accuracy = 100;
+            document.getElementById("inputText").focus();
         }
 
         function checkTyping() {
             if (!isTyping) return;
 
             const typedText = document.getElementById("inputText").value;
-            const totalLength = currentSentence.length;
-            const typedLength = typedText.length;
+            typedChars = typedText.length;
 
             // 정확도 계산
-            let correctCount = 0;
-            for (let i = 0; i < typedLength; i++) {
+            correctCount = 0;
+            for (let i = 0; i < typedChars; i++) {
                 if (typedText[i] === currentSentence[i]) {
                     correctCount++;
                 }
             }
 
-            const accuracy = (correctCount / totalLength) * 100;
-            const typedWords = typedText.length; // 타자 횟수 (타자된 문자 수)
+            accuracy = (correctCount / totalChars) * 100;
 
+            const typedWords = typedChars; // 타자 횟수 (타자된 문자 수)
+
+            // 정확도 표시
+            if (accuracy < 100) {
+                document.getElementById("message").innerText = `정확도: ${accuracy.toFixed(2)}%`;
+            }
+
+            // 타자 속도 표시
+            document.getElementById("result").innerText = `타자 속도: ${typedWords}타`;
+
+            // 문장이 완성되었을 때
             if (typedText === currentSentence) {
                 isTyping = false;
                 const endTime = new Date();
                 const timeTaken = (endTime - startTime) / 1000;
-                document.getElementById("result").innerText = `타자 속도: ${typedWords}타, 정확도: ${accuracy.toFixed(2)}%`;
-                document.getElementById("message").innerText = `완료! 소요 시간: ${timeTaken.toFixed(2)}초`;
-            } else {
-                document.getElementById("result").innerText = `타자 속도: ${typedWords}타, 정확도: ${accuracy.toFixed(2)}%`;
+                document.getElementById("result").innerText += ` | 완료! 소요 시간: ${timeTaken.toFixed(2)}초`;
             }
         }
     </script>
