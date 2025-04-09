@@ -26,6 +26,12 @@
             font-size: 22px;
             color: red;
         }
+        button {
+            font-size: 20px;
+            padding: 10px 20px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -40,9 +46,10 @@
     <script>
         const sentences = [
             "타자 속도를 테스트 해보세요!",
-            "타자 연습은 꾸준히 할수록 좋아요.",
-            "타자 연습은 손목 건강에도 좋아요.",
-            "타자를 빨리 치려면 연습이 중요해요!"
+            "오늘 나는 내 이상형을 만났다.",
+            "길 가다가 책을 떨궜다.",
+            "아름이는 왜 저렇게 생겼을까"
+            "고아름은 고하늘의 언니지만 하는 짓은 동생이다."
         ];
 
         let currentSentence;
@@ -55,6 +62,7 @@
             document.getElementById("sentence").innerText = currentSentence;
             document.getElementById("inputText").value = "";
             document.getElementById("result").innerText = "";
+            document.getElementById("message").innerText = "";
             document.getElementById("message").innerText = "";
             startTime = new Date();
             isTyping = true;
@@ -76,16 +84,16 @@
             }
 
             const accuracy = (correctCount / totalLength) * 100;
-            const typedWords = typedText.split(" ").length;
+            const typedWords = typedText.length; // 타자 횟수 (타자된 문자 수)
 
             if (typedText === currentSentence) {
                 isTyping = false;
                 const endTime = new Date();
                 const timeTaken = (endTime - startTime) / 1000;
-                document.getElementById("result").innerText = `타자 속도: ${typedWords}단어, 정확도: ${accuracy.toFixed(2)}%`;
+                document.getElementById("result").innerText = `타자 속도: ${typedWords}타, 정확도: ${accuracy.toFixed(2)}%`;
                 document.getElementById("message").innerText = `완료! 소요 시간: ${timeTaken.toFixed(2)}초`;
             } else {
-                document.getElementById("result").innerText = `타자 속도: ${typedWords}단어, 정확도: ${accuracy.toFixed(2)}%`;
+                document.getElementById("result").innerText = `타자 속도: ${typedWords}타, 정확도: ${accuracy.toFixed(2)}%`;
             }
         }
     </script>
