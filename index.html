@@ -127,8 +127,9 @@
                 document.getElementById("message").innerText = `정확도: ${accuracy.toFixed(2)}%`;
             }
 
-            // 타자 속도 표시
-            document.getElementById("result").innerText = `타자 속도: ${typedWords}타`;
+            // 타자 속도 표시 (타자 속도: 타/분)
+            const typingSpeed = Math.round(typedWords * (60 / ((new Date() - startTime) / 1000))); // 1분당 타자 속도
+            document.getElementById("result").innerText = `타자 속도: ${typingSpeed}타/분`;
 
             // 문장이 완성되었을 때
             if (typedText === currentSentence) {
